@@ -1,0 +1,8 @@
+drop table hospital;
+
+create table hospital(
+id int not null,
+nev varchar2 (200) not null,
+
+constraint pk_hospital primary key(id)
+)

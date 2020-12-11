@@ -1,0 +1,31 @@
+create or replace procedure spInsert_Patients(
+    p_hospital in hospital.nev%type,
+    p_out_rowcnt out int
+)
+
+authid definer
+as
+
+v_check_Person_id;
+v_Hospital_id;
+
+begin 
+
+if 
+v_check_Person_id = 1 then 
+insert into Patiens(Person_id ,
+Last_name ,
+First_name,
+Gender,  
+Address ,
+City,
+Health_insurance_card_numb,
+Last_visit,
+Hospital_id )
+
+values
+();
+p_out_rowcnt := SQL%rowcount;
+commit;
+
+end spInsert_Patients; 
