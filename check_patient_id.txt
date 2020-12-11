@@ -1,0 +1,35 @@
+create or replace function sf_check_Patient_id
+(
+    p_Patient_id  in Patients.Patient_id%type
+)
+return int
+deterministic
+as 
+v_patinent_char(1);
+v_i int;
+
+begin 
+if p_Patient_id is null then
+        return 0;
+    end if;
+
+if length(trim(p_Patient_id)) = 7 then
+        v_i := 1;
+while v_i <= 5 loop
+            v_patinent_char:= substr(p_Patient_id, v_i, 1);
+            if not (ascii('0') <= ascii(v_patinent_char) and ascii(v_patinent_char) <= ascii('9')) then
+                return 0;            
+            end if;
+            v_i := v_i + 1;
+        end loop;
+while v_i <= 7 loop
+            v_patinent_char := substr(p_Patient_id, v_i, 1);
+            if not (ascii('A') <= ascii(v_patinent_char) and ascii(v_patinent_char) <= ascii('Z')) then
+                return 0;            
+            end if;
+            v_i := v_i + 1;
+        end loop;
+return 1;
+end if;
+return 0;
+end sf_check_Patient_id

@@ -1,0 +1,13 @@
+set serveroutput on;
+declare 
+    v_call_patient_id int;
+    v_Patient_id Patients.Patient_id%type := '11111AA';
+begin
+ v_call_patient_id:= sf_check_Patient_id(v_Patient_id);
+    
+    IF v_call_patient_id= 1 THEN
+        DBMS_OUTPUT.PUT_LINE('Az alábbi rendszám helyes: '||v_Patient_id);
+    ELSE 
+        DBMS_OUTPUT.PUT_LINE('Az alábbi rendszám helytelen: '||v_Patient_id);    
+    END IF;
+END;
