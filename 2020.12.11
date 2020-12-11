@@ -1,0 +1,20 @@
+drop table Patients;
+
+create table (
+Person_id int NOT NULL (7),
+Last_Name varchar NOT NULL(255),
+First_Name varchar NOT NULL(255),
+Gender char(1),  
+Address varchar NOT NULL(255),
+City varchar NOT NULL(255),
+Health_insurance_card_numb
+LastVisit date,
+Hospital_id int not null,
+
+CONSTRAINT PK_Patients PRIMARY KEY(Person_id),
+CONSTRAINT UQ_Patients_hicn UNIQUE(Health_insurance_card_numb),
+CONSTRAINT CH_Patients_gender CHECK(sex IN ('M', 'F', 'N'))
+CONSTRAINT fk_hospital foreign key(Hospital_id)
+        references hospital(id)
+
+)
