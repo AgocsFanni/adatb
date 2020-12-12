@@ -1,0 +1,13 @@
+set serveroutput on;
+declare 
+    v_call_hicn int;
+    v_hicn Patients.Health_insurance_card_numb%type := '111111111';
+begin
+v_call_hicn := sf_check_hicn(v_hicn);
+    
+    IF v_call_hicn = 1 THEN
+        DBMS_OUTPUT.PUT_LINE('Az alábbi helyes: '||v_hicn);
+    ELSE 
+        DBMS_OUTPUT.PUT_LINE('Az alábbi helytelen: '||v_hicn);    
+    END IF;
+END;

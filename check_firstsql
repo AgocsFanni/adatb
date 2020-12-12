@@ -1,0 +1,28 @@
+create or replace function sf_check_first
+(
+p_first_name in patients.first_name%type
+)
+return int
+deterministic
+as
+v_first_char char;
+v_i int;
+
+begin
+if p_first_name is null then
+return 0;
+end if;
+
+if p_first_name is not null then
+v_i:=1;
+while v_i<= length(trim(p_first_name)) loop
+v_first_char:= substr(p_first_name, v_i,1);
+ if not (ascii('A') <= ascii(v_first_char) and ascii(v_first_char) <= ascii('Z')) then
+ return 0;
+end if;
+v_i:=v_i+1;
+end loop;
+return 1;
+end if;
+return 0;
+end  sf_check_first;

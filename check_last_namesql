@@ -1,0 +1,28 @@
+create or replace function sf_check_last
+(
+p_last_name in patients.last_name%type
+)
+return int
+deterministic
+as
+v_last_char char;
+v_i int;
+
+begin
+if p_last_name is null then
+return 0;
+end if;
+
+if p_last_name is not null then
+v_i:=1;
+while v_i<= length(trim(p_last_name)) loop
+v_last_char:= substr(p_last_name, v_i,1);
+ if not (ascii('A') <= ascii(v_last_char) and ascii(v_last_char) <= ascii('Z')) then
+ return 0;
+end if;
+v_i:=v_i+1;
+end loop;
+return 1;
+end if;
+return 0;
+end  sf_check_last;

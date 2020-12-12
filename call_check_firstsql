@@ -1,0 +1,13 @@
+set serveroutput on;
+declare 
+    v_call_first int;
+    v_first_name patients.first_name%type := 'AAAA';
+begin
+ v_call_first:= sf_check_first(v_first_name);
+    
+    IF v_call_first= 1 THEN
+        DBMS_OUTPUT.PUT_LINE('Az alábbi azonosító helyes: '|| v_first_name);
+    ELSE 
+        DBMS_OUTPUT.PUT_LINE('Az alábbi azonosító helytelen: '|| v_first_name);    
+    END IF;
+END;

@@ -1,0 +1,13 @@
+set serveroutput on;
+declare 
+    v_call_last int;
+    v_last_name patients.last_name%type := 'AAA';
+begin
+ v_call_last:= sf_check_last(v_last_name);
+    
+    IF v_call_last= 1 THEN
+        DBMS_OUTPUT.PUT_LINE('Az alábbi azonosító helyes: '||v_last_name);
+    ELSE 
+        DBMS_OUTPUT.PUT_LINE('Az alábbi azonosító helytelen: '||v_last_name);    
+    END IF;
+END;
