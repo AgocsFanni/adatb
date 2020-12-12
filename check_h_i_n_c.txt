@@ -1,0 +1,30 @@
+create or replace function sf_check_hicn
+(
+p_h_i_c_n in Patients.Health_insurance_card_numb%type
+)
+return int
+deterministic
+as
+v_hicn_char;
+v_i int;
+
+begin
+if p_h_i_c_n is null then
+return 0;
+end if;
+
+if length (trim(p_h_i_c_n))= 9 then 
+v_i:=1;
+while v_i<= lenght(trim(p_h_i_c_n)) loop
+v_hicn_char:= substr(p_h_i_c_n, v_i,1);
+ if not (ascii('0') <= ascii(v_hicn_char) and ascii(v_hicn_char) <= ascii('9')) then
+                return 0;  
+end if;
+v_i:=v_i+1;
+end loop;
+return 1;
+end if;
+return 0;
+end  sf_check_hicn;
+
+
