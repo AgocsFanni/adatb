@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Patients
 {
-   public enum Gender
+   public enum Gender_of_P
     {
-        M,F,N
-    };
+       N, M, F
+    }
 }

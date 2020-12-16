@@ -21,10 +21,10 @@ namespace Patients
         public Form1()
         {
             InitializeComponent();
-            cb_gender.DataSource = Enum.GetNames(typeof(Gender));
-            cb_gender.SelectedIndex = 0;
+         //  cmb_gender.DataSource = Enum.GetNames(typeof(Gender_of_P));
+          //  cmb_gender.SelectedIndex = 0;
             tablaManager = new PatientsTabla();
-            rekords_PatientList = new List<Patient>();
+            rekords_PatientList = tablaManager.Select();
             bgWorker = new BackgroundWorker();
         }
 
@@ -39,7 +39,7 @@ namespace Patients
                 ToroltSorok += tablaManager.Delete(Torlendo);
             }
 
-            MessageBox.Show(string.Format("{0} sor lett törölve", ToroltSorok));
+            MessageBox.Show(string.Format("{0} törölve", ToroltSorok));
             if (ToroltSorok != 0)
             {
                 bgWorker.RunWorkerAsync();
@@ -50,21 +50,21 @@ namespace Patients
 
         private void btn_beszuras_Click(object sender, EventArgs e)
         {
-            Patient p = new Patient()
+            Patient pat = new Patient()
             {
                 Patient_id = tb_patient_id.Text,
                 Last_name = tb_last_name.Text,
                 First_name =tb_first_name.Text,
-                Gender = cb_gender.SelectedItem.ToString(),
+                Gender = cmb_gender.SelectedItem.ToString(),
                 Last_visit = dtp_last_visit.Value,
-                Health_insurance_card_numb = tb_hicn.Text,
+                Health_insurance_card_numb =tb_hicn.Text,
                 Hospital_id= tb_hospital_id.Text
                
             };
-            tablaManager.Insert(p);
+            tablaManager.Insert(pat);
             bgWorker.RunWorkerAsync();
 
-            MessageBox.Show("Sikeres feltöltés!");
+            MessageBox.Show("Sikeresen feltölve!");
 
             tb_patient_id.Clear();
             tb_last_name.Clear();
@@ -73,24 +73,31 @@ namespace Patients
             tb_hospital_id.Clear();
 
         }
+       
 
+
+       
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            bgWorker.WorkerSupportsCancellation = true;
+           cmb_gender.DataSource = Enum.GetValues(typeof(Gender_of_P));
+            dtp_last_visit.CustomFormat = "yy-MMM.-dd";
+            dtp_last_visit.ShowUpDown = true;
+
+            InitDataGridView();
+          
+        }
 
         private void Form1_Show(object sender, EventArgs e)
         {
             bgWorker.RunWorkerAsync();
         }
 
-
-        private void Form1_Load(object sender, EventArgs e)
+        private void BgWorker_RunWorkerComplete(object sender, RunWorkerCompletedEventArgs e)
         {
-            bgWorker.WorkerSupportsCancellation = true;
-
-            dtp_last_visit.CustomFormat = "yyyy-mm-dd";
-            dtp_last_visit.ShowUpDown = true;
-
-            InitDataGridView();
-
+            FillDataGridView();
         }
+
 
         private void InitDataGridView()
         {
@@ -138,15 +145,8 @@ namespace Patients
 
 
         }
-        private void BgWorker_RunWorkerComplete(object sender, RunWorkerCompletedEventArgs e)
-        {
-            FillDataGridView();
-        }
+        
 
-        private void BgWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            rekords_PatientList = tablaManager.Select();
-        }
 
         private void FillDataGridView()
         {
@@ -169,9 +169,21 @@ namespace Patients
                 FirstCell.Value = rekords_PatientList[i].First_name;
                 Row.Cells.Add(FirstCell);
 
+                DataGridViewCell genderCell = new DataGridViewTextBoxCell();
+                genderCell.Value = rekords_PatientList[i].Gender;
+                Row.Cells.Add(genderCell);
+
                 DataGridViewCell HICNCell = new DataGridViewTextBoxCell();
                 HICNCell.Value = rekords_PatientList[i].Health_insurance_card_numb;
                 Row.Cells.Add(HICNCell);
+
+                DataGridViewCell dateCell = new DataGridViewTextBoxCell();
+                dateCell.Value = rekords_PatientList[i].Last_visit;
+                Row.Cells.Add(dateCell);
+
+                DataGridViewCell hospiCell = new DataGridViewTextBoxCell();
+                hospiCell.Value = rekords_PatientList[i].Hospital_id;
+                Row.Cells.Add(hospiCell);
 
 
                 Rows[i] = Row;
@@ -180,11 +192,32 @@ namespace Patients
             dgv_Patients.Rows.AddRange(Rows);
         }
 
+        private void BgWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            rekords_PatientList = tablaManager.Select();
+        }
+
+
         private void tb_ID_Leave(object sender, EventArgs e)
         {
             string actual = tb_patient_id.Text;
             bool Correct = tablaManager.CheckPatient_id(actual);
             tb_patient_id.BackColor = Correct ? Color.White : Color.Yellow;
+        }
+
+        private void tb_patient_id_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgv_Patients_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
